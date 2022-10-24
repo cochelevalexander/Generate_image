@@ -2,12 +2,13 @@ import random
 from PIL import Image, ImageDraw
 import os
 from random import randint
-import numpy as np # Импортируем необходимые баблиотеки
+import pandas as pd
+import numpy as np # Импортируем необходимые библиотеки
 
 if not os.path.isdir("dataset"): #Создаем основной репозиторий
     os.mkdir("dataset")
 os.chdir("dataset") # Указываем используемый репозиторий
-n_step = 21 # Количестко изображений в папке
+n_step = 5 # Количество изображений в папке
 ran_coord_rx = [] #Создание нужных массивов
 ran_coord_ry = []
 ran_coord_gx = []
@@ -16,18 +17,25 @@ Wxr = []
 Wyr = []
 Wxg = []
 Wyg = []
+filles = []
+erythrocytes = []
+lymphocytes = []
 delta = 5
-for h in range(1, 2): # Цикл для создания папок в основном репозитории
+for h in range(1, 4): # Цикл для создания папок в основном репозитории
     hh = str(h)
     if not os.path.isdir("traffic"+hh): #Создание папки
         os.mkdir("traffic"+hh)
     os.chdir("traffic"+hh)
+    rep = "traffic"+hh
     print(os.getcwd())
     sizeR = 0.5 #Размер точек
     sizeG = 1.5
     ran_red = randint(100, 500) #Количество точек в одной папке
     ran_gray = randint(5, 25)
 
+    filles.append(rep)
+    erythrocytes.append(ran_red)
+    lymphocytes.append(ran_gray)
     for i in range(0,n_step):
 
         img = Image.new('RGBA', (112, 112), 'white') # Создание изображение
@@ -59,7 +67,7 @@ for h in range(1, 2): # Цикл для создания папок в осно�
             yr1 = wyr - sizeR
             xr2 = wxr + sizeR
             yr2 = wyr + sizeR
-            idraw.ellipse((xr1, yr1, xr2, yr2), 'red') # Отображение эретроцита
+            idraw.ellipse((xr1, yr1, xr2, yr2), 'red') # Отображение точки
             istr = str(i)
             img.save('broun' + istr + '.png') #Сохраннение объекта
         for z in range(0, ran_gray):
@@ -88,4 +96,9 @@ for h in range(1, 2): # Цикл для создания папок в осно�
             idraw.ellipse((xg1, yg1, xg2, yg2), 'grey')
             istr = str(i)
             img.save('broun' + istr + '.png')
-    os.chdir("C:\\PyCharm\\pythonProject1\\dataset") # Возвращение к исходному репозиторию
+    os.chdir("C:\\GOG Games\\PyCharm\\pythonProject1\\dataset") # Возвращение к исходному репозиторию
+data = {'filles', 'erythrocytes', 'lymphocytes'}
+frame = pd.DataFrame( {'filles' : filles, 'erythrocytes' : erythrocytes, 'lymphocytes' : lymphocytes})
+print(frame)
+frame.to_pickle("./DataFrame.csv")
+
